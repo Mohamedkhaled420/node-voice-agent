@@ -1,62 +1,79 @@
-# Node Voice Agent Starter
 
-Start building interactive voice experiences with Deepgram's Voice Agent API using this Node.js starter application. This project demonstrates how to create a voice agent that can engage in natural conversations using Deepgram's advanced AI capabilities.
+# Deepgram Voice Agent
 
-## What is Deepgram?
+A serverless, real-time voice agent app using Deepgram’s Voice Agent API. The frontend is deployed on Vercel (Next.js), and the backend audio proxy runs as a Cloudflare Worker.
 
-[Deepgram's](https://deepgram.com/) voice AI platform provides APIs for speech-to-text, text-to-speech, and full speech-to-speech voice agents. Over 200,000+ developers use Deepgram to build voice AI products and features.
+---
 
-## Prerequisites
+## How It Works
 
-Before you begin, ensure you have:
-- Node.js 18 or higher installed
-- npm (comes with Node.js)
-- A Deepgram API key (see below)
-- Audio files in supported formats (WAV, MP3, M4A, or FLAC)
+- **Frontend (Vercel, Next.js):**
+  - User visits the app and clicks “Start Session.”
+  - The browser captures microphone audio and streams it via WebSocket to the backend Worker.
+  - Live transcripts and agent responses are displayed in the UI.
+- **Backend (Cloudflare Worker):**
+  - Receives WebSocket audio from the browser.
+  - Proxies audio to Deepgram’s Voice Agent API.
+  - Relays agent responses (transcripts, events) back to the browser in real time.
 
-## Quickstart
+---
 
-Follow these steps to get started with this starter application.
+## Deployment Instructions
 
-### Clone the repository
+### 1. Deploy the Cloudflare Worker
+- Clone this repo and install [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/).
+- In `voice-agent-worker/`, set your Deepgram API key:
+  ```sh
+  wrangler secret put DEEPGRAM_API_KEY
+  ```
+- Deploy the Worker:
+  ```sh
+  wrangler publish
+  ```
+- Note the deployed Worker WebSocket URL (e.g., `wss://your-worker.your-account.workers.dev`).
 
-Go to GitHub and [clone the repository](https://github.com/deepgram-starters/node-voice-agent).
+### 2. Deploy the Frontend to Vercel
+- Import this repo into Vercel.
+- Set the environment variable `WORKER_WS_URL` to your Worker’s WebSocket URL.
+- Deploy!
 
-### Install dependencies
+---
 
-Install the project dependencies:
+## Environment Variables
 
-```bash
-npm install
-```
+- **Frontend (Vercel):**
+  - `WORKER_WS_URL` — WebSocket URL of your deployed Cloudflare Worker
+- **Backend (Cloudflare Worker):**
+  - `DEEPGRAM_API_KEY` — Your Deepgram Voice Agent API key (set as a Wrangler secret)
 
-### Create a `.env` config file
+---
 
-Copy the code from `sample.env` and create a new file called `.env`. Paste in the code and enter your API key you generated in the [Deepgram Console](https://console.deepgram.com/).
+## Local Development (Codespaces)
 
-```
-DEEPGRAM_API_KEY=your_deepgram_api_key_here
-```
+- Start the frontend:
+  ```sh
+  npm install
+  npm run dev
+  ```
+- You can test the frontend locally, but the backend Worker must be deployed and reachable (set `WORKER_WS_URL` in `.env` or Vercel dashboard).
+- To run tests:
+  ```sh
+  npm test
+  ```
 
-### Run the application
+---
 
-Start the server with:
+## Tech Stack
+- Next.js (React) — Frontend UI
+- Cloudflare Worker — Audio/WebSocket proxy backend
+- Deepgram Voice Agent API — Real-time voice agent
+- TypeScript, WebSocket, MediaRecorder API
 
-```bash
-npm start
-```
+---
 
-Then open your browser and go to:
-
-```
-http://localhost:3000
-```
-
-- Allow microphone access when prompted.
-- Speak into your microphone to interact with the Deepgram Voice Agent.
-- You should hear the agent's responses played back in your browser.
-
-## Using Cursor & MDC Rules
+## Credits
+- Built by Mohamed Khaled
+- Powered by [Deepgram](https://deepgram.com/) and [Cloudflare Workers](https://workers.cloudflare.com/)
 
 This application can be modify as needed by using the [app-requirements.mdc](.cursor/rules/app-requirements.mdc) file. This file allows you to specify various settings and parameters for the application in a structured format that can be use along with [Cursor's](https://www.cursor.com/) AI Powered Code Editor.
 
