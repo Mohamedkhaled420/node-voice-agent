@@ -1,4 +1,12 @@
 {
   "version": 2,
-  "ignore": ["voice-agent-worker/**"]
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next",
+      "config": {
+        "excludeFiles": ["voice-agent-worker/**"]
+      }
+    }
+  ]
 }
