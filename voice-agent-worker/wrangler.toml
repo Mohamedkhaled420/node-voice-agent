@@ -1,0 +1,7 @@
+name = "deepgram-voice-agent-worker"
+main = "src/index.js"
+compatibility_date = "2024-07-20"
+workers_dev = true
+
+[vars]
+DEEPGRAM_API_KEY = "3fbaf3278a3c42308bad4368f62b94f91f73a17e"
